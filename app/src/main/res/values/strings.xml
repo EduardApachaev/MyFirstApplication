@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">My First Application</string>
+    <string name="title_activity_act1">act1</string>
+    <string name="title_activity_act2">act2</string>
+    <string name="title_activity_act3">act3</string>
+
+    <string name="enter_text">Введите текст</string>
+
+    <string name="screen_default">none</string>
+
+    <string name="bt_to_screen1">на экран1</string>
+    <string name="bt_to_screen2">на экран2</string>
+    <string name="bt_to_screen3">на экран3</string>
+    <string name="bt_to_screen1_new">в начало</string>
 </resources>
