@@ -12,29 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyFirstApplication">
         <activity
-            android:name=".Act1"
+            android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/title_activity_act1"
+            android:label="@string/app_name"
             android:theme="@style/Theme.MyFirstApplication">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".Act2"
-            android:exported="false"
-            android:label="@string/title_activity_act2"
-            android:theme="@style/Theme.MyFirstApplication">
-        </activity>
-
-        <activity
-            android:name=".Act3"
-            android:exported="false"
-            android:label="@string/title_activity_act3"
-            android:theme="@style/Theme.MyFirstApplication">
-
         </activity>
     </application>
 
