@@ -273,7 +273,6 @@ fun startCoroutines(
     }
     scope.launch {
         parentJob.join()
-        println("complete")
         onComplete()
     }
     return parentJob
@@ -287,7 +286,6 @@ private suspend fun executeCoroutine(
     try {
         coroutineTask()
     } catch (e: CancellationException) {
-        println("корутина отменена")
         throw e
     } catch (e: ToastException) {
         onToast(e.message ?: "Ошибка toast")
@@ -300,9 +298,7 @@ private suspend fun executeCoroutine(
 
 suspend fun coroutineTask() {
     val delayTime = Random.nextLong(1000, 10001)
-    println("start, time:$delayTime")
     delay(delayTime)
-    println("end, time:$delayTime")
 
     if (delayTime >= 7000 && Random.nextFloat() < 0.3f) {
         when (Random.nextInt(1, 4)) {
