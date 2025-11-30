@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">My First Application</string>
+    <string name="app_name">My App</string>
+    <string name="select_dispatcher_txt">Выбрать диспатчер</string>
+    <string name="run_coroutines_btn">Запустить корутины</string>
+    <string name="selected_dispather_txt">"Выбранный диспатчер: "</string>
+    <string name="sequential_execution_txt">Последовательное выполнение</string>
+    <string name="parallel_execution_txt">Параллельное выполнение</string>
+    <string name="coroutine_num_txt">"Количество корутин: "</string>
+    <string name="lazy_execution_txt">Отложенный запуск</string>
 </resources>
