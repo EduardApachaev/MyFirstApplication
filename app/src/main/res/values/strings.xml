@@ -7,4 +7,5 @@
     <string name="parallel_execution_txt">Параллельное выполнение</string>
     <string name="coroutine_num_txt">"Количество корутин: "</string>
     <string name="lazy_execution_txt">Отложенный запуск</string>
+    <string name="cancel_coroutines_btn">Отменить</string>
 </resources>

@@ -36,6 +36,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
@@ -53,6 +54,7 @@ fun MainScreen(
     var isRunning by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+    var parentJob by remember { mutableStateOf<Job?>(null) }
 
     Column (modifier = modifier
         .padding(16.dp)
@@ -149,11 +151,25 @@ fun MainScreen(
 
         if (isRunning) {
             CircularProgressIndicator()
+
+            Button(
+                onClick = {
+                    val activeChildren = parentJob?.children?.filter { it.isActive }?.toList() ?: emptyList()
+                    val cancelledCount = activeChildren.size
+
+                    activeChildren.forEach { it.cancel() }
+
+                    showToast(context, "Выполнено корутин: $cancelledCount", coroutineScope)
+
+                    parentJob = null
+                    isRunning = false
+                }
+            ) { Text(stringResource(R.string.cancel_coroutines_btn)) }
         } else {
             Button(
                 onClick = {
                     isRunning = true
-                    startCoroutines(
+                    parentJob = startCoroutines(
                         coroutineScope,
                         intValue,
                         selectedDispatcher,
@@ -203,7 +219,7 @@ fun startCoroutines(
     onSnackbar: (String) -> Unit,
     onToast: (String) -> Unit,
     onReset: () -> Unit
-) {
+) :Job {
     val dispatcher = when (selectedDispatcher) {
         "IO" -> Dispatchers.IO
         "Main" -> Dispatchers.Main
@@ -227,7 +243,7 @@ fun startCoroutines(
                 }
             } else {
                 repeat(count) {
-                    val lazyJob = scope.launch (dispatcher,CoroutineStart.LAZY) {
+                    val lazyJob = launch (dispatcher,CoroutineStart.LAZY) {
                         executeCoroutine(onToast, onSnackbar,onReset)
                     }
                     lazyJobs.add(lazyJob)
@@ -246,7 +262,7 @@ fun startCoroutines(
             } else {
                 val jobs = mutableListOf<Job>()
                 repeat(count) {
-                    val job = scope.launch (dispatcher) {
+                    val job = launch (dispatcher) {
                         executeCoroutine(onToast, onSnackbar,onReset)
                     }
                     jobs.add(job)
@@ -260,6 +276,7 @@ fun startCoroutines(
         println("complete")
         onComplete()
     }
+    return parentJob
 }
 
 private suspend fun executeCoroutine(
@@ -269,6 +286,9 @@ private suspend fun executeCoroutine(
 ) {
     try {
         coroutineTask()
+    } catch (e: CancellationException) {
+        println("корутина отменена")
+        throw e
     } catch (e: ToastException) {
         onToast(e.message ?: "Ошибка toast")
     } catch (e: SnackbarException) {
